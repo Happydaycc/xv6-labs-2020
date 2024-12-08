@@ -295,6 +295,8 @@ fork(void)
 
   np->state = RUNNABLE;
 
+  np->trace_mask = p->trace_mask;
+
   release(&np->lock);
 
   return pid;
@@ -489,6 +491,8 @@ scheduler(void)
     }
   }
 }
+
+
 
 // Switch to scheduler.  Must hold only p->lock
 // and have changed proc->state. Saves and restores
@@ -691,5 +695,20 @@ procdump(void)
       state = "???";
     printf("%d %s %s", p->pid, state, p->name);
     printf("\n");
+  }
+}
+
+//Get the number of process
+void
+numproc(uint64 *dst)
+{
+  *dst = 0;
+  struct proc *p;
+  for(p = proc; p < &proc[NPROC];p++)
+  {
+    if(p->state != UNUSED)
+    {
+      (*dst)++;
+    }
   }
 }
